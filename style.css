@@ -54,7 +54,7 @@ p {
     border: solid 3px #6091d3;
     border-radius: 10px;
 }
-.field:hover {
+.field:active {
     background: rgb(243, 236, 227);
     border: 2px solid #333;
     cursor: pointer;
