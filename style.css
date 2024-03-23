@@ -1,5 +1,6 @@
 html,body {
     overflow: hidden;
+    font-family: "Noto Sans JP",sans-serif;
 }
 div.is-hidden {
     display: none;
@@ -29,7 +30,7 @@ p {
     color: #6091d3;
 }
 
-#start:hover,#start2:hover,#start3:hover,#start4:hover {
+#start:hover,#start2:hover,#start3:hover,#start4:hover,#back:hover {
     background: #6091d3;
     color: white;
     cursor: pointer;
@@ -54,7 +55,7 @@ p {
     border: solid 3px #6091d3;
     border-radius: 10px;
 }
-.field:active {
+.field:active{
     background: rgb(243, 236, 227);
     border: 2px solid #333;
     cursor: pointer;
