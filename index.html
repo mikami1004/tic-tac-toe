@@ -18,18 +18,30 @@
 
 <body>
     <div id="top">
-        <h1>〇×ゲーム  先行か後攻かを選んでください</h1>
-        <p id="start">先行</p>
-        <p id="start2">後攻</p>
+        <h1>新〇×ゲーム</h1>
+        <p id="start">ゲームスタート</p>
+        <p id="start2">ルール説明</p>
+    </div>
+    <div id="rule" class="is-hidden">
+        <p>1.それぞれトラップを置くマスを指定する</p>
+        <p>2.相手が自分の指定したトラップマスに置いた場合、自分のマスとなる</p>
+        <p id="back">戻る</p>
     </div>
     <div id="end" class="is-hidden">
         <h1 id="judge-display"></h1>
         <p id="start3"></p>
         <p id="start4"></p>
     </div>
+    <div id="trap" class="is-hidden">
+        <h2 id="trap-text">先手はトラップマスを指定してください</h2>
+    </div>
     <div id="display" class="is-hidden">
         <h1>〇×ゲーム対戦中</h1>
-        <h2>あなたの番です</h2>
+        <h2 id="turn-text">先手の番です</h2>
+    </div>
+    <div id="active" class="is-hidden">
+        <h1>〇×ゲーム対戦中</h1>
+        <h2>トラップ発動！</h2>
     </div>
 
     <div id="game"> <!-- 盤面　-->
