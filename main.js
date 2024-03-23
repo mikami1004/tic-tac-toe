@@ -149,12 +149,12 @@ async function player() {
                         board[i]=2;
                     }else {
                         field[i].style.backgroundColor = "skyblue";
-                        board[i]=1;
+                        board[i]=2;
                     }
                 }else if(board[i]==-1) {
                     if(count%2 == 0) {
                         field[i].style.backgroundColor = "pink";
-                        board[i]=2;
+                        board[i]=1;
                     }else {
                         delay=1100;
                         TrapActived(0,i);
