@@ -12,6 +12,7 @@
         minimum-scale=1.0,
         maximum-scale=2.0,
         user-scaleble=yes" />
+    <link rel="manifest" href="./manifest.json">
 </head>
 
 <body>
@@ -43,5 +44,12 @@
     </div>
 
     <script type="text/javascript" src="main.js"></script>
+    <script>
+        if('serviceWorker' in navigator) {
+            window.addEventListener("load", function() {
+                navigator.serviceWorker.register('service_worker.js');
+            });
+        }
+    </script>
 </body>
 </html>
