@@ -50,7 +50,7 @@ a {
     justify-content: center; /* 中央寄せ */
     flex-wrap: wrap; /* 折り返しを許可する */
     align-content: stretch;
-    width: 400px;
+    width: 350px;
 }
 #game.pointer-none {
     pointer-events: none;
