@@ -105,74 +105,85 @@ function turn_action() {
     }else {
         turn.textContent = "先手の番です";
     }
-    Judgement();
+    // Judgement();
     count++;
 }
 
 // マスがクリックされた時の処理
-function player() {
+async function player() {
     console.log(board);
+    console.log(count);
     for(let i=0; i<field.length; i++) {
         field[i].onclick = () => {
-            delay = 1800;
+            delay = 0;
             if(board[i]<=0) {
-                if(count%2 == 0) {
-                    field[i].style.backgroundColor = "pink";
-                    JudgeTrap(0,i);
-                }else {
-                    field[i].style.backgroundColor = "skyblue";
-                    JudgeTrap(1,i);
+                if(board[i]==0) {
+                    if(count%2 == 0) {
+                        field[i].style.backgroundColor = "pink";
+                        board[i]=1;
+                    }else {
+                        field[i].style.backgroundColor = "skyblue";
+                        board[i]=2;
+                    }
+                }else if(board[i]==-3) {
+                    delay = 3200;
+                    if(count%2 == 0) {
+                        field[i].style.backgroundColor = "pink";
+                        TrapActived(1,i);
+                        setTimeout(() => {
+                            TrapActived(0,i);
+                            board[i]=1;
+                        },1800);
+                    }else {
+                        field[i].style.backgroundColor = "skyblue";
+                        TrapActived(0,i);
+                        setTimeout(() => {
+                            TrapActived(1,i);
+                            board[i]=2;
+                        },1800);
+                    }
+                }else if(board[i]==-2) {
+                    if(count%2 == 0) {
+                        delay=1800;
+                        TrapActived(1,i);
+                        board[i]=2;
+                    }else {
+                        field[i].style.backgroundColor = "skyblue";
+                    }
+                }else if(board[i]==-1) {
+                    if(count%2 == 0) {
+                        field[i].style.backgroundColor = "pink";
+                    }else {
+                        delay=1800;
+                        TrapActived(0,i);
+                        board[i]=1;
+                    }
                 }
-                Judgement();
-                    turn_action();
+                setTimeout(() => {
+                    Judgement();
                     if(winflag) {
+                        turn_action();
                         player();
                     }
+                },delay);
             }
         }
     }
 }
 
-// トラップマスかどうか判定
-function JudgeTrap(side,i) { // side=0 先手, side=1 後手
-    let color = ["pink","skyblue"];
-    if(board[i]>=0) {
-        field[i].style.backgroundColor = color[side];
-        board[i] = side+1;
-        delay = 0;
-        return;
-    }else if(side==0 && board[i]==-2) {
-        TrapActived(1,i);
-    }else if(side==1 && board[i]==-1) {
-        TrapActived(0,i);
-    }else if(side==0 && board[i]==-3) {
-        TrapActived(1,i);
-        setTimeout(() => {
-            TrapActived(0,i);
-        },1800);
-    }else if(side==1 && board[i]==-3) {
-        TrapActived(0,i);
-        setTimeout(() => {
-            TrapActived(1,i);
-        },1800);
-    }
-    return;
-}
-
 // トラップマス発動
-function TrapActived(side,i) {
+async function TrapActived(side2,i) {
     changescene(scenedisplay,sceneactive);
     let color = ["pink","skyblue"];
-    let counter = side;
+    let counter = side2;
     const blink = setInterval(() => {
-            field[i].style.backgroundColor = color[counter%2];
-            counter++;
+        field[i].style.backgroundColor = color[counter%2];
+        counter++;
 
-            if(counter == side+5) {
-                clearInterval(blink);
-            }
-        },200);
-    board[i] = side+1;
+        if(counter == side2+5) {
+            clearInterval(blink);
+        }
+    },200);
     setTimeout(() => {
         changescene(sceneactive,scenedisplay);
         return;
@@ -188,11 +199,13 @@ function Judgement() {
         let square3 = (board[patterns[2]]);
         let completed = square1 && square1 == square2 && square2 == square3 && square3 == square1;
         if(completed) {
-            if(count%2 == 0) {
-                judgetextcreate(0); // 先手の勝ち
+            if(square1%2 == 0) {
+                judgetextcreate(1); // 後手の勝ち
+                winflag=false;
                 return;
             }else {
-            judgetextcreate(1); // 後手の勝ち
+            judgetextcreate(0); // 先手の勝ち
+            winflag=false;
             return;
             }
         }
