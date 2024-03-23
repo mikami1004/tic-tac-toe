@@ -29,6 +29,15 @@ p {
     font-weight: bold;
     color: #6091d3;
 }
+a {
+    text-decoration: none;
+    color: #6091d3;
+}
+#twitter {
+    text-align: center;
+    margin: 50px auto;
+    width: 300px;
+}
 
 #start:hover,#start2:hover,#start3:hover,#start4:hover,#back:hover {
     background: #6091d3;
