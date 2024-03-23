@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<!-- https://bubudoufu.com/tic-tac-toe/ -->
+
+<head>
+    <meta charset="UTF-8">
+    <title>tic-tac-toe</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=320, 
+        height=480,
+        initial-scale=1.0,
+        minimum-scale=1.0,
+        maximum-scale=2.0,
+        user-scaleble=yes" />
+</head>
+
+<body>
+    <div id="top">
+        <h1>〇×ゲーム  先行か後攻かを選んでください</h1>
+        <p id="start">先行</p>
+        <p id="start2">後攻</p>
+    </div>
+    <div id="end" class="is-hidden">
+        <h1 id="judge-display"></h1>
+        <p id="start3"></p>
+        <p id="start4"></p>
+    </div>
+    <div id="display" class="is-hidden">
+        <h1>〇×ゲーム対戦中</h1>
+        <h2>あなたの番です</h2>
+    </div>
+
+    <div id="game"> <!-- 盤面　-->
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+        <div class="field"></div>
+    </div>
+
+    <script type="text/javascript" src="main.js"></script>
+</body>
+</html>
