@@ -1,18 +1,24 @@
 const scenetop = document.querySelector("#top");
+const scenerule = document.querySelector("#rule");
+const scenetrap = document.querySelector("#trap");
+const sceneactive = document.querySelector("#active");
 const sceneend = document.querySelector("#end");
 const start = document.querySelector("#start");
 const start2 = document.querySelector("#start2");
 const start3 = document.querySelector("#start3");
 const start4 = document.querySelector("#start4");
 const scenedisplay = document.querySelector("#display");
+const back = document.querySelector("#back");
 let field = document.querySelectorAll(".field");
-let turn = document.querySelector("h2");
+let traptext = document.querySelector("#trap-text");
+let turn = document.querySelector("#turn-text");
 let judgedisplay = document.querySelector("#judge-display");
 let game = document.querySelector("#game");
 
-let board = Array(9); // 盤面の配列 1=player, 2=comquter
+let board = Array(9).fill(0); // 盤面の配列 1=先手, 2=後手
 let winflag = true; // 勝敗が決まったらfalseに
 let count = 0; // 偶数なら先手の手番、基数なら後手の手番
+let delay = 2000; // 
 
 /*
 0 1 2
@@ -32,8 +38,8 @@ const win_patterns = [
 
 init();
 function init() {
-    start.addEventListener('click', playingfirst, false);
-    start2.addEventListener('click', playingsecond, false);
+    start.addEventListener('click', trap, false);
+    start2.addEventListener('click', rule, false);
 }
 
 function changescene(hiddenscene, visiblescene) {
@@ -42,24 +48,62 @@ function changescene(hiddenscene, visiblescene) {
     visiblescene.classList.add("is-visible");
     visiblescene.classList.remove("is-hidden");
 }
+let flag=0;
+function trap() {
+    let masu = -1; // トラップを置くマスを保存しておく変数
+    changescene(scenetop, scenetrap);
+    if(flag==1) {traptext.textContent = "後手はトラップマスを指定してください";}
 
-function playingfirst() {
-    changescene(scenetop, scenedisplay);
+    for(let i=0; i<field.length; i++) {
+        field[i].onclick = () => {
+            if(i != masu) {
+                if(flag==0) {
+                    reset();
+                    field[i].style.backgroundColor = "pink";
+                    masu = i;
+                }else {
+                    reset();
+                    field[i].style.backgroundColor = "skyblue";
+                    masu = i;
+                }
+                traptext.textContent = "ここでよかったらマスをもう一度タップ";
+            }else if(flag==0) {
+                reset();
+                board[masu]+=-1;
+                traptext.textContent = "";
+                flag = 1;
+                trap();
+            }else {
+                reset();
+                board[masu]+=-2;
+                traptext.textContent = "";
+                playstart();
+            }
+        }
+    }
+    function reset() {
+        for(let i=0; i<field.length; i++) {
+            field[i].style.backgroundColor = "transparent";
+        }
+        return;
+    }
+}
+function playstart() {
+    changescene(scenetrap, scenedisplay);
     player();
 }
-function playingsecond() {
-    changescene(scenetop,scenedisplay);
-    count = 3;
-    turn.textContent = "コンピューターの番です";
-    com();
-    player();
+function rule() {
+    changescene(scenetop,scenerule);
+    back.addEventListener('click', () => {
+        changescene(scenerule, scenetop);
+    });
 }
 
 function turn_action() {
     if(count % 2 == 0) {
-        turn.textContent = "コンピューターの番です";
+        turn.textContent = "後手の番です";
     }else {
-        turn.textContent = "あなたの番です";
+        turn.textContent = "先手の番です";
     }
     Judgement();
     count++;
@@ -67,76 +111,72 @@ function turn_action() {
 
 // マスがクリックされた時の処理
 function player() {
+    console.log(board);
     for(let i=0; i<field.length; i++) {
         field[i].onclick = () => {
-            if(board[i] == undefined) {
-                field[i].style.backgroundColor = "pink";
-                board[i] = 1;
-                turn_action();
-                if(winflag) {
-                    com();
+            delay = 1800;
+            if(board[i]<=0) {
+                if(count%2 == 0) {
+                    field[i].style.backgroundColor = "pink";
+                    JudgeTrap(0,i);
+                }else {
+                    field[i].style.backgroundColor = "skyblue";
+                    JudgeTrap(1,i);
                 }
+                Judgement();
+                    turn_action();
+                    if(winflag) {
+                        player();
+                    }
             }
         }
     }
 }
 
-// コンピューター側の手
-function com() {
-    game.classList.add('pointer-none');
-    // コンピューターが後手の場合の一手目
-    if(board[4] == 1 && count == 1) { // 真ん中が空いていないかつ後手の一手目
-        drawingpiece(0);
+// トラップマスかどうか判定
+function JudgeTrap(side,i) { // side=0 先手, side=1 後手
+    let color = ["pink","skyblue"];
+    if(board[i]>=0) {
+        field[i].style.backgroundColor = color[side];
+        board[i] = side+1;
+        delay = 0;
         return;
-    }else if(count == 1) { // 真ん中空いているかつ後手の一手目
-        drawingpiece(4);
+    }else if(side==0 && board[i]==-2) {
+        TrapActived(1,i);
+    }else if(side==1 && board[i]==-1) {
+        TrapActived(0,i);
+    }else if(side==0 && board[i]==-3) {
+        TrapActived(1,i);
+        setTimeout(() => {
+            TrapActived(0,i);
+        },1800);
+    }else if(side==1 && board[i]==-3) {
+        TrapActived(0,i);
+        setTimeout(() => {
+            TrapActived(1,i);
+        },1800);
+    }
+    return;
+}
+
+// トラップマス発動
+function TrapActived(side,i) {
+    changescene(scenedisplay,sceneactive);
+    let color = ["pink","skyblue"];
+    let counter = side;
+    const blink = setInterval(() => {
+            field[i].style.backgroundColor = color[counter%2];
+            counter++;
+
+            if(counter == side+5) {
+                clearInterval(blink);
+            }
+        },200);
+    board[i] = side+1;
+    setTimeout(() => {
+        changescene(sceneactive,scenedisplay);
         return;
-    }
-    // 二手目
-    if(count > 2) {
-        for(let j=2; j>0;j--) {
-            for(let i=0; i<win_patterns.length; i++) {
-                let patterns = win_patterns[i];
-                let square1 = (board[patterns[0]]);
-                let square2 = (board[patterns[1]]);
-                let square3 = (board[patterns[2]]);
-
-                // 相手がリーチまたは自分がリーチかどうかを判定
-                let x = square1 == undefined && square2 == j && square3 == j;
-                let y = square1 == j && square2 == undefined && square3 == j;
-                let z = square1 == j && square2 == j && square3 == undefined;
-
-                if(x) {
-                    drawingpiece(patterns[0]);
-                    return;
-                }else if(y) {
-                    drawingpiece(patterns[1]);
-                    return;
-                }else if(z) {
-                    drawingpiece(patterns[2]);
-                    return;
-                }
-            }
-        }
-    }
-    if(!count%2 == 0) { // どちらもリーチではなかった場合
-        let flag = true;
-        while(flag) {
-            let random = Math.floor(Math.random()*board.length); // 0-8のランダムな整数を作成
-            if(board[random] == undefined) {
-                drawingpiece(random);
-                flag = false;
-            }
-        }
-    }
-    function drawingpiece(place) {
-        setTimeout(function () {
-            field[place].style.backgroundColor = "skyblue";
-            board[place] = 2;
-            game.classList.remove('pointer-none');
-            turn_action();
-        }, 1000);
-    }
+    },1000);
 }
 
 // 三つそろったか判定
@@ -157,7 +197,7 @@ function Judgement() {
             }
         }
     }
-    if(board.includes(undefined) == false && winflag) {
+    if(board.includes(0) == false && winflag) {
         judgetextcreate(2);
         return;
     }
