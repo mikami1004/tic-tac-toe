@@ -144,7 +144,7 @@ async function player() {
                     }
                 }else if(board[i]==-2) {
                     if(count%2 == 0) {
-                        delay=1800;
+                        delay=1100;
                         TrapActived(1,i);
                         board[i]=2;
                     }else {
@@ -154,7 +154,7 @@ async function player() {
                     if(count%2 == 0) {
                         field[i].style.backgroundColor = "pink";
                     }else {
-                        delay=1800;
+                        delay=1100;
                         TrapActived(0,i);
                         board[i]=1;
                     }
@@ -223,7 +223,7 @@ function Judgement() {
         scenedisplay.classList.add("is-hidden");
         start3.textContent = "もう一度対戦する";
         start3.onclick = () => {document.location.reload()};
-        start4.textContent = "TOPへ戻る";
+        start4.textContent = "";
         start4.onclick = () => {};
         game.classList.add("pointer-none");
         winflag = false;
