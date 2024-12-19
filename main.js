@@ -128,25 +128,31 @@ async function player() {
                             board[i]=2;
                         }
                     }else if(board[i]==-3) {
-                        delay = 3200;
+                        delay = 1000;
                         if(count%2 == 0) {
                             field[i].style.backgroundColor = "pink";
                             TrapActived(1,i);
+                            board[i]=2;
+                            /*
                             setTimeout(() => {
                                 TrapActived(0,i);
                                 board[i]=1;
                             },1800);
+                            */
                         }else {
                             field[i].style.backgroundColor = "skyblue";
                             TrapActived(0,i);
+                            board[i]=1;
+                            /*
                             setTimeout(() => {
                                 TrapActived(1,i);
                                 board[i]=2;
                             },1800);
+                            */
                         }
                     }else if(board[i]==-2) {
                         if(count%2 == 0) {
-                            delay=1100;
+                            delay=1000;
                             TrapActived(1,i);
                             board[i]=2;
                         }else {
@@ -158,7 +164,7 @@ async function player() {
                             field[i].style.backgroundColor = "pink";
                             board[i]=1;
                         }else {
-                            delay=1100;
+                            delay=1000;
                             TrapActived(0,i);
                             board[i]=1;
                         }
@@ -180,7 +186,7 @@ async function player() {
 async function TrapActived(side2,i) {
     trapActivated = true;
     for(let i=0;i<field.length; i++) {
-        field[i].onclick=null;
+        field[i].onclick=null; // クリック無効化
     }
     changescene(scenedisplay,sceneactive);
     let color = ["pink","skyblue"];
