@@ -1,3 +1,25 @@
+// Socket.IO用
+const socket = io();
+let playerSymbol = null;
+let myTurn = false;
+
+socket.on('startGame', (data) => {
+    playerSymbol = data.symbol;
+    myTurn = (playerSymbol === 'X');
+    console.log(`You are ${playerSymbol}`);
+});
+
+socket.on('move', ({index, symbol}) => {
+    cells[index].textContent = symbol;
+    cells[index].classList.add('disabled');
+    myTurn = true;
+    checkWinner();
+});
+
+socket.on('waiting', (msg) => {
+    alert(msg);
+});
+
 const scenetop = document.querySelector("#top");
 const scenerule = document.querySelector("#rule");
 const scenetrap = document.querySelector("#trap");
